@@ -17,7 +17,9 @@ float-divide-by-zero,integer-divide-by-zero,leak,nonnull-attribute,null,$\
 object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,$\
 undefined,unreachable,vla-bound,vptr
 
-CFLAGS += -D DEBUG
+CFLAGS += -DDEBUG
+CFLAGS += -I../include/
+CFLAGS += -lsfml-graphics -lsfml-window -lsfml-system
 
 export CFLAGS
 

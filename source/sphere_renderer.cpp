@@ -10,8 +10,13 @@
 using namespace Sphere;
 
 void Renderer::Render() {
-    for (unsigned int x = 0; x < window_width_; x++) {
-        for (unsigned int y = 0; y < window_height_; y++) {
+    unsigned int  left_bound_x = (unsigned int)sphere_pos_vector_.x - sphere_radius_;
+    unsigned int right_bound_x = (unsigned int)sphere_pos_vector_.x + sphere_radius_;
+    unsigned int  left_bound_y = (unsigned int)sphere_pos_vector_.y - sphere_radius_;
+    unsigned int right_bound_y = (unsigned int)sphere_pos_vector_.y + sphere_radius_;
+
+    for (unsigned int x = left_bound_x; x < right_bound_x; x++) {
+        for (unsigned int y = left_bound_y; y < right_bound_y; y++) {
 
             if (!isInBound(x, y)) {
                 continue;
@@ -24,14 +29,14 @@ void Renderer::Render() {
 }
 
 const vec3<uint8_t>* Renderer::GetImage() const {
-    return pixels_;
+    return pixels_.data();
 }
 
 vec3<uint8_t> Renderer::GetPixelColor(unsigned int x, unsigned int y) const {
     vec3<float> lightness_color     = GetLightness    (x, y);
     vec3<float> highlightness_color = GetHighLightness(x, y);
 
-    return NormalizeColor(color_material * lightness_color + 
+    return NormalizeColor(color_material_ * lightness_color + 
                           highlightness_color * 0.5f);
 }
 
@@ -93,7 +98,7 @@ vec3<uint8_t> Renderer::NormalizeColor(vec3<float> color) const {
 }
 
 bool Renderer::isInBound(unsigned int x, unsigned int y) const {
-    const int r = (int)sphere_raduis_;
+    const int r = (int)sphere_radius_;
     int rel_x = (int)x - (int)sphere_pos_vector_.x;
     int rel_y = (int)y - (int)sphere_pos_vector_.y;
 
@@ -101,7 +106,7 @@ bool Renderer::isInBound(unsigned int x, unsigned int y) const {
 }
 
 float Renderer::GetThirdCoordinate(float x, float y) const {
-    float rf = static_cast<float>(sphere_raduis_);
+    float rf = static_cast<float>(sphere_radius_);
 
     float rel_x = sphere_pos_vector_.x - x;
     float rel_y = sphere_pos_vector_.y - y;
@@ -136,11 +141,89 @@ void Renderer::AddLightSource(const vec3<float>& pos, const vec3<float>& color) 
     light_sources_.push_back(LightSource{pos, color});
 }
 
-Renderer::Renderer() 
-    : pixels_(new vec3<uint8_t>[window_width_ * window_height_]) {
+Renderer::Renderer(unsigned int window_width,
+                   unsigned int window_height,
+                   const vec3<float>& sphere_pos,
+                   unsigned int sphere_radius,
+                   const vec3<float>& viewer_pos) 
+    :  window_width_ (window_width), 
+       window_height_(window_height),
+       sphere_radius_(sphere_radius),
+       sphere_pos_vector_(sphere_pos),
+       viewer_pos_vector_(viewer_pos),
+       pixels_(window_width_ * window_height_) {}
+
+Renderer::~Renderer() {}
+
+void Renderer::SetSpherePosition(const vec3<float>& sphere_pos) {
+    assert(0.f <= sphere_pos.x && sphere_pos.x <= static_cast<float>(window_width_));
+    assert(0.f <= sphere_pos.y && sphere_pos.y <= static_cast<float>(window_height_));
+    assert(0.f <= sphere_pos.z);
+    sphere_pos_vector_ = sphere_pos;
 }
 
-Renderer::~Renderer() {
-    delete[] pixels_;
+vec3<float> Renderer::GetSpherePosition() const {
+    return sphere_pos_vector_;
 }
 
+void Renderer::SetViewerPosition(const vec3<float>& viewer_pos) {
+    viewer_pos_vector_ = viewer_pos;
+}
+
+vec3<float> Renderer::GetViewerPosition() const {
+    return viewer_pos_vector_;
+}
+
+void Renderer::SetSphereRadius(unsigned int radius) {
+    sphere_radius_ = radius;
+}
+
+unsigned int Renderer::GetSphereRadius() const {
+    return sphere_radius_;
+}
+
+void Renderer::SetAmbientColor(const vec3<float>& ambient_color) {
+    assert(0.f <= ambient_color.x && ambient_color.x <= 1.f);
+    assert(0.f <= ambient_color.y && ambient_color.y <= 1.f);
+    assert(0.f <= ambient_color.z && ambient_color.z <= 1.f);
+
+    color_ambient_ = ambient_color;
+}
+
+vec3<float> Renderer::GetAmbientColor() const {
+    return color_ambient_;
+}
+
+void Renderer::SetMaterialColor(const vec3<float>& material_color) {
+    assert(0.f <= material_color.x && material_color.x <= 1.f);
+    assert(0.f <= material_color.y && material_color.y <= 1.f);
+    assert(0.f <= material_color.z && material_color.z <= 1.f);
+
+    color_material_ = material_color;
+}
+
+vec3<float> Renderer::GetMaterialColor() const {
+    return color_material_;
+}
+
+unsigned int Renderer::GetWindowWidth() const {
+    return window_width_;
+}
+
+unsigned int Renderer::GetWindowHeight() const {
+    return window_height_;
+}
+
+void Renderer::SetLightSource(size_t index, const vec3<float>& pos,
+                                            const vec3<float>& color) {
+    assert(index < light_sources_.size());
+
+    light_sources_[index].position = pos;
+    light_sources_[index].color = color;
+}
+
+LightSource Renderer::GetLightSource(size_t index) const {
+    assert(index < light_sources_.size());
+
+    return light_sources_[index];
+}

@@ -98,9 +98,13 @@ vec3<uint8_t> Renderer::NormalizeColor(vec3<float> color) const {
 }
 
 bool Renderer::isInBound(unsigned int x, unsigned int y) const {
-    const int r = (int)sphere_radius_;
-    int rel_x = (int)x - (int)sphere_pos_vector_.x;
-    int rel_y = (int)y - (int)sphere_pos_vector_.y;
+    if (x >= window_width_ || y >= window_height_) {
+        return false;
+    };
+
+    const int r     = static_cast<int>(sphere_radius_);
+    const int rel_x = static_cast<int>(x) - static_cast<int>(sphere_pos_vector_.x);
+    const int rel_y = static_cast<int>(y) - static_cast<int>(sphere_pos_vector_.y);
 
     return (rel_x * rel_x + rel_y * rel_y < r * r);
 }

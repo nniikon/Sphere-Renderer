@@ -148,8 +148,8 @@ Event Window::HandleMouseEvent(bool is_pressed) {
 
         ElementLocation location = button->location_;
 
-        if (location.x_ <= mouse_pos.x && mouse_pos.x <= location.x_ + location.width_ &&
-            location.y_ <= mouse_pos.y && mouse_pos.y <= location.y_ + location.height_) {
+        if ((int)location.x_ <= mouse_pos.x && mouse_pos.x <= (int)(location.x_ + location.width_ )&&
+            (int)location.y_ <= mouse_pos.y && mouse_pos.y <= (int)(location.y_ + location.height_)) {
 
             EventType event_type = is_pressed ? EventType::PressedButton 
                                               : EventType::ReleasedButton;

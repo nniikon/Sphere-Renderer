@@ -71,7 +71,7 @@ vec3<float> Renderer::GetHighLightness(unsigned int x, unsigned int y) const {
         vec3<float> light_direction = Norm(light.position - surface_point);
         float light_normal_angle_cos = Dot(light_direction, normal);
 
-        vec3<float> reflaction = normal * light_normal_angle_cos * 2 - light_direction;
+        vec3<float> reflaction = normal * light_normal_angle_cos * 2.f - light_direction;
 
         float angle_cos = Dot(reflaction, viewer);
         if (angle_cos > 0) {

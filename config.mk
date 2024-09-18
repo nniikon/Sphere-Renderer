@@ -1,8 +1,8 @@
-CFLAGS = -O0 -Wall \
+CFLAGS = -Ofast -Wall \
 -Wmissing-declarations -Wcast-align -Wcast-qual \
 -Wchar-subscripts -Wconversion \
 -Wempty-body -Wfloat-equal -Wformat-nonliteral -Wformat-security \
--Wformat=2 -Winline \
+-Wformat=2 \
 -Wpacked -Wpointer-arith -Winit-self \
 -Wredundant-decls -Wshadow \
 -Wstrict-overflow=2 \

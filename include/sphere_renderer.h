@@ -3,11 +3,12 @@
 
 #include <cinttypes>
 #include <vector>
-#include "vec.h"
+#include "tgp_vectors.h"
 
 namespace Sphere {
 
-using namespace Vectors;
+using TGP::vec3;
+using TGP::vec2;
 
 struct LightSource {
     vec3<float> position;

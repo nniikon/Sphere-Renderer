@@ -1,3 +1,4 @@
+#ifdef Ajd;asldkfja;sdkfja;dskfj
 #include "sphere_window.h"
 
 #include <cstring>
@@ -170,3 +171,4 @@ Event Window::HandleWindowClosed() {
 const Event& Window::GetLastEvent() {
     return event_;
 }
+#endif

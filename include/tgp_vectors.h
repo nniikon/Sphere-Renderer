@@ -1,5 +1,5 @@
-#ifndef VEC_H_
-#define VEC_H_
+#ifndef TGP_VECTORS_H_
+#define TGP_VECTORS_H_
 
 #include <cmath>
 
@@ -9,7 +9,7 @@
 // vec3_base>type>
 // vec2 : std::conditional(N == 2, vec2_base, vec3_base)
 
-namespace Vectors {
+namespace TGP {
 
 // VEC2
 
@@ -60,9 +60,16 @@ public:
     vec3<T>& operator=(const vec3<T>& other);
 };
 
-#include "../source/vec.tpp"
+typedef vec2<float>        vec2f;
+typedef vec2<unsigned int> vec2u;
+typedef vec2<int>          vec2i;
+
+typedef vec3<float>        vec3f;
+typedef vec3<unsigned int> vec3u;
+typedef vec3<int>          vec3i;
+
+#include "../source/tgp_vectors.tpp"
 
 }; // namespace Vectors
 
-#endif // VEC_H_
-
+#endif // TGP_VECTORS_H_
